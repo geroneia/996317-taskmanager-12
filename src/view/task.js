@@ -13,6 +13,8 @@ const isExpired = (dueDate) => {
   return currentDate.getTime() > dueDate.getTime();
 };
 
+
+// берет из объекта с повтороми по дням есть/нет повтор, возвращает true/false
 const isRepeating = (repeating) => {
   return Object.values(repeating).some(Boolean);
 };
@@ -34,6 +36,7 @@ export const createTaskTemplate = (task) => {
     }) :
     ``;
 
+  // проверки на просроченные, повторяющиеся, архивированные, избранные задачи
   const deadlineClassName = isExpired(dueDate) ?
     `card--deadline` :
     ``;
