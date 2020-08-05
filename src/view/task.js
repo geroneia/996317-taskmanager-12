@@ -1,23 +1,4 @@
-// проверяет просрочена ли задача
-const isExpired = (dueDate) => {
-  if (dueDate === null) {
-    return false;
-  }
-
-  // текущая дата
-  let currentDate = new Date();
-  currentDate.setHours(23, 59, 59, 999);
-  currentDate = new Date(currentDate);
-
-  // если текущая дата позже сгенерированной - true
-  return currentDate.getTime() > dueDate.getTime();
-};
-
-
-// берет из объекта с повтороми по дням есть/нет повтор, возвращает true/false
-const isRepeating = (repeating) => {
-  return Object.values(repeating).some(Boolean);
-};
+import {isTaskExpired, isTaskRepeating, humanizeTaskDueDate} from "../utils";
 
 export const createTaskTemplate = (task) => {
   const {
@@ -30,18 +11,15 @@ export const createTaskTemplate = (task) => {
   } = task;
 
   const date = dueDate !== null ?
-    dueDate.toLocaleString(`en-US`, {
-      day: `numeric`,
-      month: `long`
-    }) :
+  humanizeTaskDueDate(dueDate) :
     ``;
 
   // проверки на просроченные, повторяющиеся, архивированные, избранные задачи
-  const deadlineClassName = isExpired(dueDate) ?
+  const deadlineClassName = isTaskExpired(dueDate) ?
     `card--deadline` :
     ``;
 
-  const repeatClassName = isRepeating(repeating) ?
+  const repeatClassName = isTaskRepeating(repeating) ?
     `card--repeat` :
     ``;
 
