@@ -10,12 +10,10 @@ const isExpired = (dueDate) => {
   return currentDate > dueDate.getTime();
 };
 
-const isRepeating = (repeating) => {
-  return Object.values(repeating).some(Boolean);
-};
+const isRepeating = (repeating) => Object.values(repeating).some(Boolean);
 
-const createTaskEditDateTemplate = (dueDate) => {
-  return `<button class="card__date-deadline-toggle" type="button">
+const createTaskEditDateTemplate = (dueDate) =>
+  `<button class="card__date-deadline-toggle" type="button">
       date: <span class="card__date-status">${dueDate !== null ? `yes` : `no`}</span>
     </button>
 
@@ -31,10 +29,9 @@ const createTaskEditDateTemplate = (dueDate) => {
       </label>
     </fieldset>` : ``}
   `;
-};
 
-const createTaskEditRepeatingTemplate = (repeating) => {
-  return `<button class="card__repeat-toggle" type="button">
+const createTaskEditRepeatingTemplate = (repeating) =>
+  `<button class="card__repeat-toggle" type="button">
     repeat:<span class="card__repeat-status">${isRepeating(repeating) ? `yes` : `no`}</span>
   </button>
 
@@ -53,7 +50,6 @@ const createTaskEditRepeatingTemplate = (repeating) => {
       >`).join(``)}
     </div>
   </fieldset>` : ``}`;
-};
 
 const createTaskEditColorsTemplate = (currentColor) => {
   const colors = [`black`, `yellow`, `blue`, `green`, `pink`];
@@ -89,14 +85,14 @@ export const createTaskEditTemplate = (task = {}) => {
     }
   } = task;
 
-  const deadlineClassName = isExpired(dueDate)
-    ? `card--deadline`
-    : ``;
+  const deadlineClassName = isExpired(dueDate) ?
+    `card--deadline` :
+    ``;
   const dateTemplate = createTaskEditDateTemplate(dueDate);
 
-  const repeatingClassName = isRepeating(repeating)
-    ? `card--repeat`
-    : ``;
+  const repeatingClassName = isRepeating(repeating) ?
+    `card--repeat` :
+    ``;
   const repeatingTemplate = createTaskEditRepeatingTemplate(repeating);
 
   const colorsTemplate = createTaskEditColorsTemplate(color);
@@ -142,5 +138,5 @@ export const createTaskEditTemplate = (task = {}) => {
               </div>
             </div>
           </form>
-        </article>`
+        </article>`;
 };

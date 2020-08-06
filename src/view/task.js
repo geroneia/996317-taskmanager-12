@@ -1,4 +1,8 @@
-import {isTaskExpired, isTaskRepeating, humanizeTaskDueDate} from "../utils.js";
+import {
+  isTaskExpired,
+  isTaskRepeating,
+  humanizeTaskDueDate
+} from "../utils.js";
 
 export const createTaskTemplate = (task) => {
   const {
@@ -11,7 +15,7 @@ export const createTaskTemplate = (task) => {
   } = task;
 
   const date = dueDate !== null ?
-  humanizeTaskDueDate(dueDate) :
+    humanizeTaskDueDate(dueDate) :
     ``;
 
   // проверки на просроченные, повторяющиеся, архивированные, избранные задачи

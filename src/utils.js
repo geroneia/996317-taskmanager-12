@@ -7,10 +7,10 @@ export const getRandomInteger = (a = 0, b = 1) => {
 
 // текущая дата
 const getCurrentDate = () => {
-const currentDate = new Date();
-currentDate.setHours(23, 59, 59, 999);
+  const currentDate = new Date();
+  currentDate.setHours(23, 59, 59, 999);
 
-return new Date(currentDate);
+  return new Date(currentDate);
 };
 
 // проверяет просрочена ли задача
@@ -20,25 +20,23 @@ export const isTaskExpired = (dueDate) => {
   }
 
   const currentDate = getCurrentDate();
-  
+
   // если текущая дата позже сгенерированной - true
   return currentDate.getTime() > dueDate.getTime();
 };
 
 export const isTaskExpiringToday = (dueDate) => {
-    if (dueDate === null) {
-        return false
-    }
+  if (dueDate === null) {
+    return false;
+  }
 
-    const currentDate = getCurrentDate();
+  const currentDate = getCurrentDate();
 
-    return currentDate.getTime() === dueDate.getTime();
+  return currentDate.getTime() === dueDate.getTime();
 };
 
 // берет из объекта с повтороми по дням есть/нет повтор, возвращает true/false
-export const isTaskRepeating = (repeating) => {
-  return Object.values(repeating).some(Boolean);
-};
+export const isTaskRepeating = (repeating) => Object.values(repeating).some(Boolean);
 
 export const humanizeTaskDueDate = (dueDate) => {
   return dueDate.toLocaleString(`en-US`, {
