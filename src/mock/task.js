@@ -1,23 +1,18 @@
-import {COLORS} from "../const.js";
-import {getRandomInteger} from "../utils.js";
+import {COLORS, MAX_DAYS_GAP, DESCRIPTIONS} from "../const.js";
+import {getRandomInteger, getTrueOrFaulse} from "../utils.js";
 
 // получает произвольно выбранное описание
 const generateDescription = () => {
-  const descriptions = [
-    `Изучить теорию`,
-    `Сделать домашку`,
-    `Пройти интенсив на соточку`
-  ];
 
-  const randomIndex = getRandomInteger(0, descriptions.length - 1);
+  const randomIndex = getRandomInteger(0, DESCRIPTIONS.length - 1);
 
-  return descriptions[randomIndex];
+  return DESCRIPTIONS[randomIndex];
 };
 
 // получает случайную дату
 const generateDate = () => {
   // есть/нет дедлайн
-  const isDate = Boolean(getRandomInteger(0, 1));
+  const isDate = getTrueOrFaulse();
 
   if (!isDate) {
     return null;
@@ -25,8 +20,7 @@ const generateDate = () => {
 
 
   // случайное число в пределах двух недель
-  const maxDaysGap = 7;
-  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
+  const daysGap = getRandomInteger(-MAX_DAYS_GAP, MAX_DAYS_GAP);
   const currentDate = new Date();
 
   // часы
@@ -39,17 +33,15 @@ const generateDate = () => {
 };
 
 // получает объект со случайно повторяющимися днями недели
-const generateRepeating = () => {
-  return {
-    mo: false,
-    tu: false,
-    we: Boolean(getRandomInteger(0, 1)),
-    th: false,
-    fr: Boolean(getRandomInteger(0, 1)),
-    sa: false,
-    su: false
-  };
-};
+const generateRepeating = () => ({
+  mo: false,
+  tu: false,
+  we: getTrueOrFaulse(),
+  th: false,
+  fr: getTrueOrFaulse(),
+  sa: false,
+  su: false
+});
 
 // получает случайный цвет
 const getRandomColor = () => {
@@ -78,7 +70,7 @@ export const generateTask = () => {
     dueDate,
     repeating,
     color: getRandomColor(),
-    isArchive: Boolean(getRandomInteger(0, 1)),
-    isFavorite: Boolean(getRandomInteger(0, 1))
+    isArchive: getTrueOrFaulse(),
+    isFavorite: getTrueOrFaulse()
   };
 };

@@ -1,6 +1,5 @@
 // шаблон одного из фильтров
-const createFilterItemTemplate = (filter, isChecked) => {
-  const {name, count} = filter;
+const createFilterItemTemplate = ({name, count}, isChecked) => {
 
   return (
     `<input

@@ -44,3 +44,6 @@ export const humanizeTaskDueDate = (dueDate) => {
     month: `long`
   });
 };
+
+// да или нет
+export const getTrueOrFaulse = () => Boolean(getRandomInteger(0, 1));
