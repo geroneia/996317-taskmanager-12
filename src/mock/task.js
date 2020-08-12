@@ -1,13 +1,15 @@
-import {COLORS, MAX_DAYS_GAP, DESCRIPTIONS} from "../const.js";
+import {COLORS} from "../const.js";
 import {getRandomInteger, getTrueOrFaulse} from "../utils.js";
 
+const MAX_DAYS_GAP = 7;
+const DESCRIPTIONS = [
+  `Изучить теорию`,
+  `Сделать домашку`,
+  `Пройти интенсив на соточку`
+];
+
 // получает произвольно выбранное описание
-const generateDescription = () => {
-
-  const randomIndex = getRandomInteger(0, DESCRIPTIONS.length - 1);
-
-  return DESCRIPTIONS[randomIndex];
-};
+const generateDescription = () => DESCRIPTIONS[getRandomInteger(0, DESCRIPTIONS.length - 1)];
 
 // получает случайную дату
 const generateDate = () => {
