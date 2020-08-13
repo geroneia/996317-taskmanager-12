@@ -3,7 +3,7 @@ export const RenderPosition = {
   BEFOREEND: `beforeend`
 };
 
-export const renderElement = (container, element, place) => {
+export const render = (container, element, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
@@ -65,12 +65,11 @@ export const isTaskExpiringToday = (dueDate) => {
 // берет из объекта с повтороми по дням есть/нет повтор, возвращает true/false
 export const isTaskRepeating = (repeating) => Object.values(repeating).some(Boolean);
 
-export const humanizeTaskDueDate = (dueDate) => {
-  return dueDate.toLocaleString(`en-US`, {
+export const humanizeTaskDueDate = (dueDate) =>
+  dueDate.toLocaleString(`en-US`, {
     day: `numeric`,
     month: `long`
   });
-};
 
 // да или нет
 export const getTrueOrFaulse = () => Boolean(getRandomInteger(0, 1));

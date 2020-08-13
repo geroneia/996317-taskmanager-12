@@ -1,8 +1,8 @@
-// шаблон одного из фильтров
-const createFilterItemTemplate = ({name, count}, isChecked) => {
+import {createElement} from "../utils.js";
 
-  return (
-    `<input
+// шаблон одного из фильтров
+const createFilterItemTemplate = ({name, count}, isChecked) =>
+  `<input
       type="radio"
       id="filter__${name}"
       class="filter__input visually-hidden"
@@ -12,9 +12,8 @@ const createFilterItemTemplate = ({name, count}, isChecked) => {
     />
     <label for="filter__${name}" class="filter__label">
       ${name} <span class="filter__${name}-count">${count}</span></label
-    >`
-  );
-};
+    >`;
+
 
 // заполняет шаблон массивом из фильтров
 export const createFilterTemplate = (filterItems) => {
@@ -26,3 +25,26 @@ export const createFilterTemplate = (filterItems) => {
     ${filterItemsTemplate}
   </section>`;
 };
+
+export default class Filter {
+  constructor(filters) {
+    this._filters = filters;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilterTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
