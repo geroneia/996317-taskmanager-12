@@ -1,21 +1,25 @@
 import {COLORS} from "../const.js";
+import {isTaskExpired, isTaskRepeating, humanizeTaskDueDate, createElement} from "../utils.js";
 
-const isExpired = (dueDate) => {
-  if (dueDate === null) {
-    return false;
-  }
-
-  const currentDate = new Date();
-
-  currentDate.setHours(23, 59, 59, 999);
-
-  return currentDate > dueDate.getTime();
+const BLANK_TASK = {
+  color: COLORS[0],
+  description: ``,
+  dueDate: null,
+  repeating: {
+    mo: false,
+    tu: false,
+    we: false,
+    th: false,
+    fr: false,
+    sa: false,
+    su: false
+  },
+  isArchive: false,
+  isFavorite: false
 };
 
-const isRepeating = (repeating) => Object.values(repeating).some(Boolean);
-
-const createTaskEditDateTemplate = (dueDate) =>
-  `<button class="card__date-deadline-toggle" type="button">
+const createTaskEditDateTemplate = (dueDate) => {
+  return `<button class="card__date-deadline-toggle" type="button">
       date: <span class="card__date-status">${dueDate !== null ? `yes` : `no`}</span>
     </button>
 
@@ -26,18 +30,19 @@ const createTaskEditDateTemplate = (dueDate) =>
           type="text"
           placeholder=""
           name="date"
-          value="${dueDate.toLocaleString(`en-US`, {day: `numeric`, month: `long`})}"
+          value="${humanizeTaskDueDate(dueDate)}"
         />
       </label>
     </fieldset>` : ``}
   `;
+};
 
-const createTaskEditRepeatingTemplate = (repeating) =>
-  `<button class="card__repeat-toggle" type="button">
-    repeat:<span class="card__repeat-status">${isRepeating(repeating) ? `yes` : `no`}</span>
+const createTaskEditRepeatingTemplate = (repeating) => {
+  return `<button class="card__repeat-toggle" type="button">
+    repeat:<span class="card__repeat-status">${isTaskRepeating(repeating) ? `yes` : `no`}</span>
   </button>
 
-  ${isRepeating(repeating) ? `<fieldset class="card__repeat-days">
+  ${isTaskRepeating(repeating) ? `<fieldset class="card__repeat-days">
     <div class="card__repeat-days-inner">
       ${Object.entries(repeating).map(([day, repeat]) => `<input
         class="visually-hidden card__repeat-day-input"
@@ -52,9 +57,9 @@ const createTaskEditRepeatingTemplate = (repeating) =>
       >`).join(``)}
     </div>
   </fieldset>` : ``}`;
+};
 
 const createTaskEditColorsTemplate = (currentColor) => {
-
   return COLORS.map((color) => `<input
     type="radio"
     id="color-${color}"
@@ -70,74 +75,85 @@ const createTaskEditColorsTemplate = (currentColor) => {
   >`).join(``);
 };
 
-export const createTaskEditTemplate = (task = {}) => {
-  const {
-    color = `black`,
-    description = ``,
-    dueDate = null,
-    repeating = {
-      mo: false,
-      tu: false,
-      we: false,
-      th: false,
-      fr: false,
-      sa: false,
-      su: false
-    }
-  } = task;
+const createTaskEditTemplate = (task) => {
+  const {color, description, dueDate, repeating} = task;
 
-  const deadlineClassName = isExpired(dueDate) ?
-    `card--deadline` :
-    ``;
+  const deadlineClassName = isTaskExpired(dueDate)
+    ? `card--deadline`
+    : ``;
   const dateTemplate = createTaskEditDateTemplate(dueDate);
 
-  const repeatingClassName = isRepeating(repeating) ?
-    `card--repeat` :
-    ``;
+  const repeatingClassName = isTaskRepeating(repeating)
+    ? `card--repeat`
+    : ``;
   const repeatingTemplate = createTaskEditRepeatingTemplate(repeating);
 
   const colorsTemplate = createTaskEditColorsTemplate(color);
 
-  return ` <article class="card card--edit card--${color} ${deadlineClassName} ${repeatingClassName}">
-          <form class="card__form" method="get">
-            <div class="card__inner">
-              <div class="card__color-bar">
-                <svg class="card__color-bar-wave" width="100%" height="10">
-                  <use xlink:href="#wave"></use>
-                </svg>
-              </div>
-  
-              <div class="card__textarea-wrap">
-                <label>
-                  <textarea
-                    class="card__text"
-                    placeholder="Start typing your text here..."
-                    name="text"
-                  >${description}</textarea>
-                </label>
-              </div>
-  
-              <div class="card__settings">
-                <div class="card__details">
-                  <div class="card__dates">
-                  ${dateTemplate}
-                  ${repeatingTemplate}
-                   </div>
-                </div>
-  
-                <div class="card__colors-inner">
-                  <h3 class="card__colors-title">Color</h3>
-                  <div class="card__colors-wrap">
-                    ${colorsTemplate}
-                  </div>
-                </div>
-              </div>
-  
-              <div class="card__status-btns">
-                <button class="card__save" type="submit">save</button>
-                <button class="card__delete" type="button">delete</button>
-              </div>
+  return `<article class="card card--edit card--${color} ${deadlineClassName} ${repeatingClassName}">
+    <form class="card__form" method="get">
+      <div class="card__inner">
+        <div class="card__color-bar">
+          <svg class="card__color-bar-wave" width="100%" height="10">
+            <use xlink:href="#wave"></use>
+          </svg>
+        </div>
+
+        <div class="card__textarea-wrap">
+          <label>
+            <textarea
+              class="card__text"
+              placeholder="Start typing your text here..."
+              name="text"
+            >${description}</textarea>
+          </label>
+        </div>
+
+        <div class="card__settings">
+          <div class="card__details">
+            <div class="card__dates">
+              ${dateTemplate}
+
+              ${repeatingTemplate}
             </div>
-          </form>
-        </article>`;
+          </div>
+
+          <div class="card__colors-inner">
+            <h3 class="card__colors-title">Color</h3>
+            <div class="card__colors-wrap">
+              ${colorsTemplate}
+            </div>
+          </div>
+        </div>
+
+        <div class="card__status-btns">
+          <button class="card__save" type="submit">save</button>
+          <button class="card__delete" type="button">delete</button>
+        </div>
+      </div>
+    </form>
+  </article>`;
 };
+
+export default class TaskEdit {
+  constructor(task) {
+    this._task = task || BLANK_TASK;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTaskEditTemplate(this._task);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
