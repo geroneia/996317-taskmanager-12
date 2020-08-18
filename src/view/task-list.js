@@ -1,25 +1,7 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
-const createTaskListTemplate = () => `<div class="board__tasks"></div>`;
-
-export default class Tasklist {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Tasklist extends AbstractView {
   getTemplate() {
-    return createTaskListTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    return `<div class="board__tasks"></div>`;
   }
 }
