@@ -116,7 +116,8 @@ export default class Task {
     );
   }
 
-  _handleFormSubmit() {
+  _handleFormSubmit(task) {
+    this._changeData(task);
     this._replaceFormToCard();
   }
 }

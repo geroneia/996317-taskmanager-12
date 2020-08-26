@@ -31,7 +31,7 @@ const createTaskEditDateTemplate = (dueDate, isDueDate) => {
           type="text"
           placeholder=""
           name="date"
-          value="${humanizeTaskDueDate(dueDate)}"
+          value="${dueDate !== null ? humanizeTaskDueDate(dueDate) : ``}"
         />
       </label>
     </fieldset>` : ``}
@@ -141,8 +141,9 @@ export default class TaskEdit extends SmartView {
   constructor(task = BLANK_TASK) {
     super();
     this._data = TaskEdit.parseTaskToData(task);
+
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    this._descriptionInutHandler = this._descriptionInutHandler.bind(this);
+    this._descriptionInputHandler = this._descriptionInputHandler.bind(this);
     this._dueDateToggleHandler = this._dueDateToggleHandler.bind(this);
     this._repeatingToggleHandler = this._repeatingToggleHandler.bind(this);
     this._repeatingChangeHandler = this._repeatingChangeHandler.bind(this);
@@ -152,8 +153,7 @@ export default class TaskEdit extends SmartView {
   }
 
   reset(task) {
-    this.updateData(TaskEdit.parseTaskToData(task)
-    );
+    this.updateData(TaskEdit.parseTaskToData(task));
   }
 
   getTemplate() {
@@ -167,19 +167,19 @@ export default class TaskEdit extends SmartView {
 
   _setInnerHandlers() {
     this.getElement()
-    .querySelector(`.card__date-deadline-toggle`)
-    .addEventListener(`click`, this._dueDateToggleHandler);
+      .querySelector(`.card__date-deadline-toggle`)
+      .addEventListener(`click`, this._dueDateToggleHandler);
     this.getElement()
-    .querySelector(`.card__repeat-toggle`)
-    .addEventListener(`click`, this._repeatingToggleHandler);
+      .querySelector(`.card__repeat-toggle`)
+      .addEventListener(`click`, this._repeatingToggleHandler);
     this.getElement()
       .querySelector(`.card__text`)
       .addEventListener(`input`, this._descriptionInputHandler);
 
     if (this._data.isRepeating) {
       this.getElement()
-        .querySelector(`.card__repeat-days-inner`)
-        .addEventListener(`change`, this._repeatingChangeHandler);
+          .querySelector(`.card__repeat-days-inner`)
+          .addEventListener(`change`, this._repeatingChangeHandler);
     }
 
     this.getElement()
@@ -204,7 +204,7 @@ export default class TaskEdit extends SmartView {
     });
   }
 
-  _descriptionInutHandler(evt) {
+  _descriptionInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
       description: evt.target.value

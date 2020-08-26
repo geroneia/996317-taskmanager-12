@@ -82,6 +82,7 @@ export default class Board {
   }
 
   _clearTaskList() {
+    // поочередно вызываются и удаляются все презентеры
     Object
       .values(this._taskPresenter)
       .forEach((presenter) => presenter.destroy());
@@ -93,6 +94,7 @@ export default class Board {
   _renderTask(task) {
     const taskPresenter = new TaskPresenter(this._taskListComponent, this._handleTaskChange, this._handleModeChange);
     taskPresenter.init(task);
+    // записываются все презентеры
     this._taskPresenter[task.id] = taskPresenter;
   }
 
