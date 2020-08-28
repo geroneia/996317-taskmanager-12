@@ -1,3 +1,5 @@
+import moment from "moment";
+
 // текущая дата
 const getCurrentDate = () => {
   const currentDate = new Date();
@@ -31,11 +33,13 @@ export const isTaskExpiringToday = (dueDate) => {
 // берет из объекта с повторами по дням есть/нет повтор, возвращает true/false
 export const isTaskRepeating = (repeating) => Object.values(repeating).some(Boolean);
 
-export const humanizeTaskDueDate = (dueDate) =>
-  dueDate.toLocaleString(`en-US`, {
-    day: `numeric`,
-    month: `long`
-  });
+export const formatTaskDueDate = (dueDate) => {
+  if (!(dueDate instanceof Date)) {
+    return ``;
+  }
+
+  return moment(dueDate).format(`D MMMM`);
+};
 
 const getWeightForNullDate = (dateA, dateB) => {
   if (dateA === null && dateB === null) {
