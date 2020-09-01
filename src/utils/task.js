@@ -17,7 +17,7 @@ export const isTaskExpired = (dueDate) => {
   const currentDate = getCurrentDate();
 
   // если текущая дата позже сгенерированной - true
-  return currentDate.getTime() > dueDate.getTime();
+  return moment(currentDate).isAfter(dueDate, `day`);
 };
 
 export const isTaskExpiringToday = (dueDate) => {
@@ -27,7 +27,7 @@ export const isTaskExpiringToday = (dueDate) => {
 
   const currentDate = getCurrentDate();
 
-  return currentDate.getTime() === dueDate.getTime();
+  return moment(dueDate).isSame(currentDate, `day`);
 };
 
 // берет из объекта с повторами по дням есть/нет повтор, возвращает true/false
@@ -75,4 +75,12 @@ export const sortTaskDown = (taskA, taskB) => {
   }
 
   return taskB.dueDate.getTime() - taskA.dueDate.getTime();
+};
+
+export const isDatesEqual = (dateA, dateB) => {
+  if (dateA === null && dateB === null) {
+    return true;
+  }
+
+  return moment(dateA).isSame(dateB, `day`);
 };

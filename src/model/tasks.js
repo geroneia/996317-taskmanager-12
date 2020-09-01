@@ -16,11 +16,11 @@ export default class Tasks extends Observer {
 
   updateTask(updateType, update) {
     // findIndex() возвращает индекс в массиве, если элемент удовлетворяет
-  // условию проверяющей функции. В противном случае возвращается -1
+    // условию проверяющей функции. В противном случае возвращается -1
     const index = this._tasks.findIndex((task) => task.id === update.id);
 
     if (index === -1) {
-      throw new Error(`Can't updateunexisting task`);
+      throw new Error(`Can't update unexisting task`);
     }
 
     this._tasks = [
@@ -29,10 +29,10 @@ export default class Tasks extends Observer {
       ...this._tasks.slice(index + 1)
     ];
 
-    this._notify(updateType, updateType);
+    this._notify(updateType, update);
   }
 
-  // Новая доббавляется в начало списка
+  // Новая добавляется в начало списка
   addTask(updateType, update) {
     this._tasks = [
       update,
@@ -42,7 +42,7 @@ export default class Tasks extends Observer {
     this._notify(updateType, update);
   }
 
-  deleteTask() {
+  deleteTask(updateType, update) {
     const index = this._tasks.findIndex((task) => task.id === update.id);
 
     if (index === -1) {
