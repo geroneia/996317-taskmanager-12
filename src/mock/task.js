@@ -1,7 +1,7 @@
 import {COLORS} from "../const.js";
-import {getRandomInteger, getTrueOrFaulse} from "../utils/common.js";
+import {getRandomInteger, getTrueOrFalse as getTrueOrFalse} from "../utils/common.js";
 
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const MAX_DAYS_GAP = 7;
 const DESCRIPTIONS = [
@@ -16,7 +16,7 @@ const generateDescription = () => DESCRIPTIONS[getRandomInteger(0, DESCRIPTIONS.
 // получает случайную дату
 const generateDate = () => {
   // есть/нет дедлайн
-  const isDate = getTrueOrFaulse();
+  const isDate = getTrueOrFalse();
 
   if (!isDate) {
     return null;
@@ -40,9 +40,9 @@ const generateDate = () => {
 const generateRepeating = () => ({
   mo: false,
   tu: false,
-  we: getTrueOrFaulse(),
+  we: getTrueOrFalse(),
   th: false,
-  fr: getTrueOrFaulse(),
+  fr: getTrueOrFalse(),
   sa: false,
   su: false
 });
@@ -75,7 +75,7 @@ export const generateTask = () => {
     dueDate,
     repeating,
     color: getRandomColor(),
-    isArchive: getTrueOrFaulse(),
-    isFavorite: getTrueOrFaulse()
+    isArchive: getTrueOrFalse(),
+    isFavorite: getTrueOrFalse()
   };
 };
