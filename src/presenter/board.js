@@ -61,9 +61,8 @@ export default class Board {
     this._filterModel.removeObserver(this._handleModelEvent);
   }
 
-  createTask() {
-    this._taskNewPresenter.init();
-
+  createTask(callback) {
+    this._taskNewPresenter.init(callback);
   }
 
   _getTasks() {

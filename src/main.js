@@ -6,15 +6,24 @@ import TasksModel from "./model/tasks.js";
 import FilterModel from "./model/filter.js";
 import {render, RenderPosition, remove} from "./utils/render.js";
 import {MenuItem, UpdateType, FilterType} from "./const.js";
-import Api from "./api.js";
+import Api from "./api/index.js";
+import Store from "./api/store.js";
+import Provider from "./api/provider.js";
 
 const AUTHORIZATION = `Basic hdfgsdhfudfSw334cl1sa2j`;
 const END_POINT = `https://12.ecmascript.pages.academy/task-manager`;
+
+const STORE_PREFIX = `taskmanager-localstorage`;
+const STORE_VER = `v12`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
 const api = new Api(END_POINT, AUTHORIZATION);
+
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 
 const tasksModel = new TasksModel();
 
@@ -22,7 +31,7 @@ const filterModel = new FilterModel();
 
 const siteMenuComponent = new SiteMenuView();
 
-const boardPresenter = new BoardPresenter(siteMainElement, tasksModel, filterModel, api);
+const boardPresenter = new BoardPresenter(siteMainElement, tasksModel, filterModel, apiWithProvider);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, tasksModel);
 
 const handleTaskNewFormClose = () => {
@@ -57,7 +66,7 @@ const handleSiteMenuClick = (menuItem) => {
 filterPresenter.init();
 boardPresenter.init();
 
-api.getTasks()
+apiWithProvider.getTasks()
   .then((tasks) => {
     tasksModel.setTasks(UpdateType.INIT, tasks);
     render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
@@ -68,3 +77,21 @@ api.getTasks()
     render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`)
+      .then(() => {
+        console.log(`ServiceWorker available`); // eslint-disable-line
+      }).catch(() => {
+        console.log(`ServiceWorker isn't available`); // eslint-disable-line
+      });
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  apiWithProvider.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});
